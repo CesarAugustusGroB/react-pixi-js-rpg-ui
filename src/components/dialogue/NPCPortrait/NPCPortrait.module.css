@@ -1,0 +1,94 @@
+/* NPC Portrait Styles */
+
+.container {
+  position: relative;
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-panel-dark);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-panel-light) 0%, var(--bg-panel-dark) 100%);
+  color: var(--text-muted);
+  font-size: var(--font-size-2xl);
+}
+
+/* Decorative frame corners */
+.frameCorner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--color-accent-gold);
+  border-style: solid;
+  border-width: 0;
+}
+
+.frameCorner.topLeft {
+  top: -2px;
+  left: -2px;
+  border-top-width: 3px;
+  border-left-width: 3px;
+}
+
+.frameCorner.topRight {
+  top: -2px;
+  right: -2px;
+  border-top-width: 3px;
+  border-right-width: 3px;
+}
+
+.frameCorner.bottomLeft {
+  bottom: -2px;
+  left: -2px;
+  border-bottom-width: 3px;
+  border-left-width: 3px;
+}
+
+.frameCorner.bottomRight {
+  bottom: -2px;
+  right: -2px;
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+}
+
+/* Glow effect on speaking */
+.speaking .frame {
+  box-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+}
+
+/* Name tag below portrait */
+.nameTag {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-panel);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

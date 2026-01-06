@@ -1,0 +1,25 @@
+/* Grid View Styles */
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 64px);
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+/* Responsive grid for smaller screens */
+@media (max-width: 600px) {
+  .container {
+    grid-template-columns: repeat(5, 56px);
+  }
+}
+
+.emptyMessage {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+}

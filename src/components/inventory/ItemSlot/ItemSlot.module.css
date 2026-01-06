@@ -1,0 +1,94 @@
+/* Item Slot Styles */
+
+.slot {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: var(--bg-panel-light);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  will-change: transform;
+}
+
+.slot:hover {
+  border-color: var(--color-primary);
+}
+
+.slot.selected {
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 0 12px rgba(255, 213, 79, 0.3);
+}
+
+.slot.empty {
+  background: var(--bg-panel-dark);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.slot.empty:hover {
+  border-color: transparent;
+}
+
+/* Rarity border colors */
+.slot.common {
+  border-color: var(--color-rarity-common);
+}
+
+.slot.uncommon {
+  border-color: var(--color-rarity-uncommon);
+}
+
+.slot.rare {
+  border-color: var(--color-rarity-rare);
+}
+
+.slot.epic {
+  border-color: var(--color-rarity-epic);
+}
+
+.slot.legendary {
+  border-color: var(--color-rarity-legendary);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.itemIcon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.quantity {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  min-width: 16px;
+  text-align: right;
+}
+
+.rarityGlow {
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-md) + 2px);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.rarityGlow.legendary {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
+}
+
+.rarityGlow.epic {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+}

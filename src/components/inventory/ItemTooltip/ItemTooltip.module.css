@@ -1,0 +1,134 @@
+/* Item Tooltip Styles */
+
+.tooltip {
+  position: fixed;
+  width: 280px;
+  padding: var(--spacing-md);
+  background: var(--bg-panel-dark);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: var(--border-subtle);
+}
+
+.iconContainer {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.titleSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+/* Rarity name colors */
+.name.common { color: var(--color-rarity-common); }
+.name.uncommon { color: var(--color-rarity-uncommon); }
+.name.rare { color: var(--color-rarity-rare); }
+.name.epic { color: var(--color-rarity-epic); }
+.name.legendary { color: var(--color-rarity-legendary); }
+
+.category {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.description {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+}
+
+.statName {
+  color: var(--text-muted);
+}
+
+.statValue {
+  color: var(--color-health-full);
+  font-weight: 500;
+}
+
+.statValue.negative {
+  color: var(--color-health-low);
+}
+
+.effect {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-style: italic;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(79, 195, 247, 0.1);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.quantity {
+  color: var(--text-secondary);
+}
+
+.hint {
+  color: var(--color-accent-gold);
+}

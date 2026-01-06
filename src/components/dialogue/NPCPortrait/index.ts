@@ -1,0 +1,1 @@
+export { NPCPortrait } from './NPCPortrait';

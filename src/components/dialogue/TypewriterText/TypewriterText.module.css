@@ -1,0 +1,39 @@
+/* Typewriter Text Styles */
+
+.text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--color-primary);
+  margin-left: 2px;
+  animation: blink 0.8s ease-in-out infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Highlight certain words */
+.highlight {
+  color: var(--color-accent-gold);
+  font-weight: 500;
+}
+
+.emphasis {
+  color: var(--color-primary);
+  font-style: italic;
+}

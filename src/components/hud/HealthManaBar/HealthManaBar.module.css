@@ -1,0 +1,216 @@
+/* Health/Mana Bar Container Styles */
+
+.container {
+  position: fixed;
+  top: var(--spacing-lg);
+  left: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  z-index: var(--z-hud);
+}
+
+/* Individual Bar Container */
+.barContainer {
+  position: relative;
+  width: 280px;
+  height: 28px;
+}
+
+.barBackground {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-panel);
+  border-radius: var(--radius-round);
+  overflow: hidden;
+  border: var(--border-subtle);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Bar Fill Base */
+.barFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: var(--radius-round);
+  will-change: width;
+  transition: background-color 0.3s ease;
+}
+
+/* Health Bar Specific */
+.healthFill {
+  composes: barFill;
+}
+
+/* Mana Bar Specific */
+.manaFill {
+  composes: barFill;
+  background: linear-gradient(
+    180deg,
+    var(--color-mana) 0%,
+    color-mix(in srgb, var(--color-mana) 70%, black) 100%
+  );
+}
+
+/* Stamina Bar Specific */
+.staminaFill {
+  composes: barFill;
+  background: linear-gradient(
+    180deg,
+    var(--color-stamina) 0%,
+    color-mix(in srgb, var(--color-stamina) 70%, black) 100%
+  );
+}
+
+/* Ghost Bar - Damage Trail */
+.ghostBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-health-ghost);
+  border-radius: var(--radius-round);
+  pointer-events: none;
+}
+
+/* Damage Flash Overlay */
+.damageFlash {
+  position: absolute;
+  inset: 0;
+  background: rgba(239, 83, 80, 0.6);
+  border-radius: var(--radius-round);
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Shine Effect */
+.barShine {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  right: 4px;
+  height: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 100%
+  );
+  border-radius: var(--radius-round);
+  pointer-events: none;
+}
+
+/* Text Overlay */
+.barText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.currentValue {
+  color: var(--text-primary);
+}
+
+.separator {
+  margin: 0 2px;
+  color: var(--text-muted);
+}
+
+.maxValue {
+  color: var(--text-secondary);
+}
+
+/* Label */
+.barLabel {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 1;
+}
+
+/* Icon Container */
+.barIcon {
+  position: absolute;
+  left: -36px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-panel);
+  border-radius: 50%;
+  border: var(--border-subtle);
+}
+
+/* Experience Bar (smaller variant) */
+.expBarContainer {
+  position: relative;
+  width: 280px;
+  height: 8px;
+  margin-top: var(--spacing-xs);
+}
+
+.expBarBackground {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-panel-dark);
+  border-radius: var(--radius-round);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.expFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-experience) 0%,
+    color-mix(in srgb, var(--color-experience) 80%, white) 100%
+  );
+  border-radius: var(--radius-round);
+  will-change: width;
+}
+
+.expText {
+  position: absolute;
+  right: 0;
+  top: -18px;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.levelBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-panel);
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-accent-gold);
+  margin-bottom: var(--spacing-xs);
+}

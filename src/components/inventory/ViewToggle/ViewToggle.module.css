@@ -1,0 +1,37 @@
+/* View Toggle Styles */
+
+.container {
+  display: flex;
+  background: var(--bg-panel-dark);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.button:hover {
+  color: var(--text-primary);
+}
+
+.button.active {
+  background: var(--color-primary);
+  color: var(--bg-panel-dark);
+}
+
+.button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}

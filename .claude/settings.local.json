@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(timeout 5 npm run dev)",
+      "Bash(git grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run simulate:progression:quick:*)",
+      "Bash(npm run simulate:quick:*)",
+      "Bash(npm run build:quick:*)",
+      "Bash(cd:*)",
+      "Skill(skill-creator)",
+      "Bash(git commit:*)",
+      "Bash(npx -p typescript tsc --noEmit)",
+      "Bash(npm install)",
+      "Bash(npm test:*)",
+      "Bash(npm run test:*)",
+      "Bash(npx vitest run)",
+      "Bash(find:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(npm run test:quick:*)",
+      "Bash(npx vitest:*)",
+      "Bash(git mv:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)"
+    ],
+    "deny": [
+      "Write(*.md)",
+      "Write(*.txt)"
+    ],
+    "ask": []
+  }
+}

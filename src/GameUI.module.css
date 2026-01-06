@@ -1,0 +1,82 @@
+.uiContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-hud);
+}
+
+.uiContainer > * {
+  pointer-events: auto;
+}
+
+/* Demo Controls - Remove in production */
+.demoControls {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--bg-panel);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.demoControls h3 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent-gold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.buttonRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.buttonRow:last-child {
+  margin-bottom: 0;
+}
+
+.demoControls button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-panel-light);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.demoControls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-primary);
+}
+
+.demoControls button:active {
+  transform: scale(0.98);
+}
+
+.demoControls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.section {
+  margin-bottom: var(--spacing-md);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h4 {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
