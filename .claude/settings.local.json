@@ -23,7 +23,8 @@
       "Bash(npx vitest:*)",
       "Bash(git mv:*)",
       "Bash(npm create:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(cat:*)"
     ],
     "deny": [
       "Write(*.md)",

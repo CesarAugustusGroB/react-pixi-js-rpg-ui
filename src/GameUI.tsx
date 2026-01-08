@@ -3,12 +3,241 @@ import { HealthManaBar } from '@components/hud';
 import { DialogueBox } from '@components/dialogue';
 import { InventoryPanel } from '@components/inventory';
 import { PauseMenu, SettingsMenu, CharacterSheet } from '@components/menus';
+import { MapContainer } from '@components/map';
 import { usePlayerStore } from '@stores/playerStore';
 import { useDialogueStore } from '@stores/dialogueStore';
 import { useInventoryStore } from '@stores/inventoryStore';
 import { useMenuStore, selectIsMenuOpen } from '@stores/menuStore';
+import { useMapStore, selectIsMapOpen } from '@stores/mapStore';
+import { useMapBridgeSync } from '@integration/useMapBridgeSync';
 import type { DialogueLine, Item, ItemCategory, ItemRarity } from '@/types';
+import type { MapRegion, MapZone, MapLocation, Path } from '@/types/map';
 import styles from './GameUI.module.css';
+
+// Demo map data
+const createDemoMapData = () => {
+  const region: MapRegion = {
+    id: 'demo-region',
+    seed: 42,
+    name: 'The Wandering Lands',
+    bounds: { x: 0, y: 0, width: 1000, height: 800 },
+    zones: [],
+    generatedAt: Date.now(),
+  };
+
+  const zones: Record<string, MapZone> = {
+    'zone-forest': {
+      id: 'zone-forest',
+      regionId: 'demo-region',
+      name: 'Whispering Woods',
+      biome: 'forest',
+      bounds: { x: 0, y: 0, width: 500, height: 400 },
+      locations: [],
+      dangerLevel: 3,
+      discoveryState: 'discovered',
+      adjacentZoneIds: ['zone-plains'],
+      ambientThreat: ['beasts'],
+    },
+    'zone-plains': {
+      id: 'zone-plains',
+      regionId: 'demo-region',
+      name: 'Golden Plains',
+      biome: 'plains',
+      bounds: { x: 500, y: 0, width: 500, height: 400 },
+      locations: [],
+      dangerLevel: 2,
+      discoveryState: 'discovered',
+      adjacentZoneIds: ['zone-forest'],
+      ambientThreat: ['bandits'],
+    },
+  };
+
+  const locations: Record<string, MapLocation> = {
+    'loc-village': {
+      id: 'loc-village',
+      zoneId: 'zone-forest',
+      name: 'Eldergrove Village',
+      locationType: 'village',
+      position: { x: 150, y: 200 },
+      discoveryState: 'visited',
+      connectedTo: [
+        {
+          targetLocationId: 'loc-shrine',
+          pathId: 'path-village-shrine',
+          travelTime: 30,
+          dangerModifier: 1.2,
+          pathType: 'road',
+          discoveryState: 'visited',
+        },
+        {
+          targetLocationId: 'loc-town',
+          pathId: 'path-village-town',
+          travelTime: 45,
+          dangerModifier: 1.0,
+          pathType: 'road',
+          discoveryState: 'discovered',
+        },
+      ],
+      isInteractable: true,
+      hasActiveEvent: false,
+      actualData: {
+        description: 'A peaceful village nestled among ancient trees.',
+        npcs: ['elder', 'merchant'],
+        availableServices: ['rest', 'trade'],
+        lootTable: 'village_common',
+        encounterTable: 'none',
+        specialFlags: ['safe_zone', 'respawn_point'],
+      },
+    },
+    'loc-shrine': {
+      id: 'loc-shrine',
+      zoneId: 'zone-forest',
+      name: 'Moonlit Shrine',
+      locationType: 'shrine',
+      position: { x: 300, y: 150 },
+      discoveryState: 'discovered',
+      connectedTo: [
+        {
+          targetLocationId: 'loc-village',
+          pathId: 'path-village-shrine',
+          travelTime: 30,
+          dangerModifier: 1.2,
+          pathType: 'road',
+          discoveryState: 'visited',
+        },
+      ],
+      isInteractable: true,
+      hasActiveEvent: false,
+      actualData: {
+        description: 'An ancient shrine bathed in eternal moonlight.',
+        npcs: ['shrine_keeper'],
+        availableServices: ['heal', 'quest'],
+        lootTable: 'shrine_rare',
+        encounterTable: 'none',
+        specialFlags: ['safe_zone'],
+      },
+    },
+    'loc-town': {
+      id: 'loc-town',
+      zoneId: 'zone-plains',
+      name: 'Sunhaven Town',
+      locationType: 'town',
+      position: { x: 600, y: 250 },
+      discoveryState: 'discovered',
+      connectedTo: [
+        {
+          targetLocationId: 'loc-village',
+          pathId: 'path-village-town',
+          travelTime: 45,
+          dangerModifier: 1.0,
+          pathType: 'road',
+          discoveryState: 'discovered',
+        },
+        {
+          targetLocationId: 'loc-dungeon',
+          pathId: 'path-town-dungeon',
+          travelTime: 60,
+          dangerModifier: 2.0,
+          pathType: 'trail',
+          discoveryState: 'rumored',
+        },
+      ],
+      isInteractable: true,
+      hasActiveEvent: false,
+      actualData: {
+        description: 'A bustling trading town at the crossroads.',
+        npcs: ['mayor', 'blacksmith', 'innkeeper'],
+        availableServices: ['rest', 'trade', 'craft', 'storage'],
+        lootTable: 'town_market',
+        encounterTable: 'none',
+        specialFlags: ['safe_zone', 'respawn_point'],
+      },
+    },
+    'loc-dungeon': {
+      id: 'loc-dungeon',
+      zoneId: 'zone-plains',
+      name: 'Forgotten Crypt',
+      locationType: 'dungeon',
+      position: { x: 800, y: 350 },
+      discoveryState: 'rumored',
+      connectedTo: [
+        {
+          targetLocationId: 'loc-town',
+          pathId: 'path-town-dungeon',
+          travelTime: 60,
+          dangerModifier: 2.0,
+          pathType: 'trail',
+          discoveryState: 'rumored',
+        },
+      ],
+      isInteractable: true,
+      hasActiveEvent: false,
+      rumor: {
+        id: 'rumor-crypt',
+        targetLocationId: 'loc-dungeon',
+        vagueName: 'The Old Crypt',
+        vagueDescription: 'They say there\'s an old crypt filled with treasure...',
+        vagueLocationType: 'dungeon',
+        source: 'npc_dialogue',
+        sourceId: 'innkeeper-001',
+        sourceDetail: 'A drunk traveler at the inn',
+        acquiredAt: Date.now(),
+        reliability: 0.7,
+        distortion: {
+          nameAccurate: true,
+          typeAccurate: true,
+          positionOffset: { x: 20, y: -15 },
+          dangerAccurate: false,
+          lootExaggeration: 1.5,
+        },
+      },
+    },
+  };
+
+  const paths: Record<string, Path> = {
+    'path-village-shrine': {
+      id: 'path-village-shrine',
+      points: [
+        { x: 150, y: 200 },
+        { x: 200, y: 170 },
+        { x: 250, y: 160 },
+        { x: 300, y: 150 },
+      ],
+      sourceId: 'loc-village',
+      targetId: 'loc-shrine',
+      pathType: 'road',
+      discoveryState: 'visited',
+    },
+    'path-village-town': {
+      id: 'path-village-town',
+      points: [
+        { x: 150, y: 200 },
+        { x: 300, y: 220 },
+        { x: 450, y: 240 },
+        { x: 600, y: 250 },
+      ],
+      sourceId: 'loc-village',
+      targetId: 'loc-town',
+      pathType: 'road',
+      discoveryState: 'discovered',
+    },
+    'path-town-dungeon': {
+      id: 'path-town-dungeon',
+      points: [
+        { x: 600, y: 250 },
+        { x: 680, y: 280 },
+        { x: 740, y: 320 },
+        { x: 800, y: 350 },
+      ],
+      sourceId: 'loc-town',
+      targetId: 'loc-dungeon',
+      pathType: 'trail',
+      discoveryState: 'rumored',
+    },
+  };
+
+  return { region, zones, locations, paths, startingLocationId: 'loc-village' };
+};
 
 // Demo dialogue data
 const demoDialogue: DialogueLine[] = [
@@ -177,6 +406,15 @@ export const GameUI: React.FC = () => {
   const togglePause = useMenuStore((state) => state.togglePause);
   const isMenuOpen = useMenuStore(selectIsMenuOpen);
 
+  // Map store actions
+  const openMap = useMapStore((state) => state.openMap);
+  const closeMap = useMapStore((state) => state.closeMap);
+  const isMapOpen = useMapStore(selectIsMapOpen);
+  const initializeMap = useMapStore((state) => state.initializeMap);
+
+  // Initialize map bridge sync
+  useMapBridgeSync();
+
   // Track if demo items have been loaded
   const itemsLoadedRef = useRef(false);
 
@@ -230,6 +468,9 @@ export const GameUI: React.FC = () => {
       <PauseMenu />
       <SettingsMenu />
       <CharacterSheet />
+
+      {/* Map System */}
+      <MapContainer />
 
       {/* Demo Controls - Remove in production */}
       <div className={styles.demoControls}>
@@ -310,6 +551,22 @@ export const GameUI: React.FC = () => {
           <div className={styles.buttonRow}>
             <button type="button" onClick={togglePause}>
               {isMenuOpen ? 'Close Menu' : 'Pause'}
+            </button>
+          </div>
+        </div>
+
+        {/* Map Demo */}
+        <div className={styles.section}>
+          <h4>Map (Press M)</h4>
+          <div className={styles.buttonRow}>
+            <button type="button" onClick={() => (isMapOpen ? closeMap() : openMap())}>
+              {isMapOpen ? 'Close Map' : 'Open Map'}
+            </button>
+            <button
+              type="button"
+              onClick={() => initializeMap(createDemoMapData())}
+            >
+              Init Map
             </button>
           </div>
         </div>
